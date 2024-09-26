@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            background: white;
+        }
+        input {
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+    <h2>Real-Time Chat</h2>
+    <div id="messages"></div>
+    <input id="messageInput" type="text" placeholder="Type a message..." autocomplete="off"/>
+    <button id="sendButton">Send</button>
+
+    <script>
+        const socket = io();
+
+        const messagesDiv = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // Listen for messages from the server
+        socket.on('response', function(msg) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = msg;
+            messagesDiv.appendChild(messageElement);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to the latest message
+        });
+
+        // Send message on button click
+        sendButton.onclick = function() {
+            const msg = messageInput.value;
+            socket.emit('message', msg);
+            messageInput.value = ''; // Clear the input
+        };
+
+        // Send message on Enter key press
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendButton.click(); // Trigger button click
+            }
+        });
+    </script>
+</body>
+</html>

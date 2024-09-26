@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Uploaded</title>
+</head>
+<body>
+    <h1>File uploaded successfully!</h1>
+    <p>Your file: <a href="{{ url_for('display_file', filename=filename) }}">{{ filename }}</a></p>
+    <img src="{{ url_for('display_file', filename=filename) }}" alt="Uploaded File" style="max-width:500px;"/>
+</body>
+</html>
+
